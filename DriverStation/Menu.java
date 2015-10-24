@@ -11,7 +11,12 @@ public class Menu {
         System.out.println("\u000c");
         System.out.println("Welcomd to the B and N Drive System!");
         
+        Thread listenerThread = new Thread(new ListenerThread());
+        listenerThread.start();
+        
         System.out.println("Write something here when you want to shut down the program:");
         new Scanner(System.in).nextLine();
+        
+        listenerThread.interrupt();
     }
 }
