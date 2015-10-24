@@ -1,5 +1,6 @@
 import java.net.*;
 import java.util.*;
+import java.util.function.*;
 
 public class ListenerThread implements Runnable {
     public static final int PORT = 2000;
@@ -15,6 +16,8 @@ public class ListenerThread implements Runnable {
      */
     public void run() {
         robotThreads = new ArrayList<Thread>();
+        
+        JoystickHandler jHandler = new JoystickHandler();
 
         try {
             listeningSocket = new ServerSocket(PORT);
@@ -31,9 +34,19 @@ public class ListenerThread implements Runnable {
                 System.out.println("Error accepting connection");
                 continue;
             }
-
-            robotThreads.add(new Thread(new RobotThread(newConnection)));
-            robotThreads.get(robotThreads.size()-1).start();
+            
+            Joystick newJoystick = jHandler.getOpenJoystick();
+            if(newJoystick != null) {
+                Consumer<RobotThread> callback = (RobotThread rThread) -> jHandler.joystickWasDisconnected(rThread.joystick);
+                robotThreads.add(new Thread(new RobotThread(newConnection,
+                    newJoystick,
+                    callback)));
+                robotThreads.get(robotThreads.size()-1).start();
+            } else {
+                try {
+                    newConnection.close();
+                } catch(Exception e){}
+            }
         }
         
         /// Shut down threads and close sockets
