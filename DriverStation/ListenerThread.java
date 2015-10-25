@@ -3,7 +3,7 @@ import java.util.*;
 import java.util.function.*;
 
 public class ListenerThread implements Runnable {
-    public static final int PORT = 2000;
+    public static final int PORT = 3001;
 
     ServerSocket listeningSocket = null;
     ArrayList<Thread> robotThreads;
@@ -15,6 +15,7 @@ public class ListenerThread implements Runnable {
      * If there is no open joystick, nothing is done with connection.
      */
     public void run() {
+        System.out.println("ye");
         robotThreads = new ArrayList<Thread>();
         
         JoystickHandler jHandler = new JoystickHandler();
@@ -23,6 +24,7 @@ public class ListenerThread implements Runnable {
             listeningSocket = new ServerSocket(PORT);
         } catch(Exception e) {
             System.out.println("Could not establish socket at port " + PORT);
+            e.printStackTrace();
             System.exit(1);
         }
 
@@ -49,6 +51,8 @@ public class ListenerThread implements Runnable {
             }
         }
         
+        System.out.println("Stop");
+        
         /// Shut down threads and close sockets
         /// Only reached once this thread is interrupted
         for(Thread robotThread : robotThreads) {
@@ -63,5 +67,12 @@ public class ListenerThread implements Runnable {
         } catch(Exception e) {
             System.out.println("Error shutting down ListenThread");
         }
+    }
+    
+    public void close() {
+        try {
+            listeningSocket.close();
+        } catch(Exception e) {}
+        Thread.currentThread().interrupt();
     }
 }

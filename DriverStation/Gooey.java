@@ -14,6 +14,12 @@ public class Gooey extends JFrame {
 
     // Start and stop buttons.
     private JButton startButton,stopButton;
+    
+    // Thread that runs the ListenerThread class
+    private ListenerThread listenerThread;
+    
+    // The thread that runs the ListenerThread object
+    private Thread listenerThreadShell;
 
     /* GUI constructor.
      *
@@ -30,7 +36,8 @@ public class Gooey extends JFrame {
         stopButton = new JButton("STOP");
 
         startButton.addActionListener(new ActionListener() { 
-            public void actionPerformed(ActionEvent e) { 
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("action");
                 start();
             } 
         });
@@ -41,12 +48,9 @@ public class Gooey extends JFrame {
             } 
         });
 
-        Thread listenerThread = new Thread(new ListenerThread());
-        listenerThread.start();
-
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                listenerThread.interrupt();
+                stop();
             }
         });
 
@@ -61,7 +65,9 @@ public class Gooey extends JFrame {
      * the stop() function).
      */
     public void start() {
-        
+        listenerThread = new ListenerThread();
+        listenerThreadShell = new Thread(listenerThread);
+        listenerThreadShell.start();
     }
 
     /*  Listener thread soft-stop function.
@@ -69,10 +75,12 @@ public class Gooey extends JFrame {
      *  Sets sent motor values to zero.
      */
     public void stop() {
-
+        listenerThread.close();
+        listenerThreadShell.interrupt();
     }
 
     public static void main(String[] args){
+        System.out.println("\u000c");
         Gooey mainWindow = new Gooey();
     }
 }
