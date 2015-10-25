@@ -19,5 +19,7 @@ An additional safety function could be consistently sending motor values with an
 - ~~Continuously send motor values to robots~~
 - Distinguish between right and left joysticks and send two different values
   - May require testing with actual joystick
-- Build java GUI with "Stop" Button
-- Make "Stop" Button send a motor value of 0 and close socket
+- ~~Build java GUI with "Stop" and "Start" Button~~
+	- Make "Stop" button set all motor values to zero, make "Start button resume normal operation"
+- Add visualization of joysticks to GUI (optional but nice)
+- Write arduino side
