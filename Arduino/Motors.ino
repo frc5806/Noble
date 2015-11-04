@@ -66,9 +66,9 @@ void motorGo(uint8_t motor, uint8_t direct, uint8_t pwm) {
 // Sets a motor (1 left, 0 right) to a value -100 to 100
 void setMotor(uint8_t motor, int power) {
   if (power == 0) motorGo(motor,0,0);
-  else if (power > 0) {
-    if (motor==1) motorGo(1,CCW,power*10);
-    else motorGo(0,CW,power*10);
+  else if (power < 0) {
+    if (motor==1) motorGo(1,CCW,power*-10);
+    else motorGo(0,CW,power*-10);
   } else {
     if (motor==1) motorGo(1,CW,power*10);
     else motorGo(0,CCW,power*10);

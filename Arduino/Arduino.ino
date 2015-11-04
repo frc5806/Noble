@@ -10,9 +10,10 @@ void loop() {
   setMotor(RIGHT,100);
   delay(1000);
   
-  setMotor(LEFT,-100);
+  
+  setMotor(LEFT,100);
   setMotor(RIGHT,-100);
-  delay(1000);
+  delay(400);
 }
 
 
