@@ -13,6 +13,7 @@ int pwmpin[2] = {5, 6}; // PWM input
 int cspin[2] = {2, 3}; // CS: Current sense ANALOG input
 int enpin[2] = {0, 1}; // EN: Status of switches output (Analog pin)
 
+// Initializes motor outputs.
 void motorInit() {
 	for (int i=0; i<2; i++) {
 		pinMode(inApin[i], OUTPUT);
@@ -24,6 +25,7 @@ void motorInit() {
 	}
 }
 
+// Turns motors off (not brake)
 void motorOff(int motor) {
 	for (int i=0; i<2; i++) {
 		digitalWrite(inApin[i], LOW);
@@ -48,19 +50,13 @@ void motorOff(int motor) {
  it'll go
  */
 void motorGo(uint8_t motor, uint8_t direct, uint8_t pwm) {
-	if (motor <= 1) {
-		if (direct <=4) {
-			// Set inA[motor]
-			if (direct <=1) digitalWrite(inApin[motor], HIGH);
-			else digitalWrite(inApin[motor], LOW);
+	if (direct <=1) digitalWrite(inApin[motor], HIGH);
+	else digitalWrite(inApin[motor], LOW);
+	
+	if ((direct==0)||(direct==2)) digitalWrite(inBpin[motor], HIGH);
+	else digitalWrite(inBpin[motor], LOW);
 
-			// Set inB[motor]
-			if ((direct==0)||(direct==2)) digitalWrite(inBpin[motor], HIGH);
-			else digitalWrite(inBpin[motor], LOW);
-
-			analogWrite(pwmpin[motor], pwm);
-		}
-	}
+	analogWrite(pwmpin[motor], pwm);
 }
 
 // Sets a motor (1 left, 0 right) to a value -100 to 100
