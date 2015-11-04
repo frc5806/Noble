@@ -1,86 +1,86 @@
 import java.util.*;
-import java.awt.*; 
+import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * A GUI menu for the user.
- * Entry point into the program.
- * Allows the user to stop the program and shut down all sockets.
+ * A GUI menu for the user. Entry point into the program. Allows the user to
+ * stop the program and shut down all sockets.
  */
 public class Gooey extends JFrame {
-    // Main panel.
-    private JPanel panel;
+	// Main panel.
+	private JPanel panel;
 
-    // Start and stop buttons.
-    private JButton startButton,stopButton;
-    
-    // Thread that runs the ListenerThread class
-    private ListenerThread listenerThread;
-    
-    // The thread that runs the ListenerThread object
-    private Thread listenerThreadShell;
+	// Start and stop buttons.
+	private JButton startButton, stopButton;
 
-    /* GUI constructor.
-     *
-     * Makes and attaches methods to buttons,
-     * and starts a listener thread.
-     */
-    public Gooey() {
-        super("Noble Driver Station");
-        setSize(300, 200);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new FlowLayout());
+	// Thread that runs the ListenerThread class
+	private ListenerThread listenerThread;
 
-        startButton = new JButton("START");
-        stopButton = new JButton("STOP");
+	// The thread that runs the ListenerThread object
+	private Thread listenerThreadShell;
 
-        startButton.addActionListener(new ActionListener() { 
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("action");
-                start();
-            } 
-        });
+	/*
+	 * GUI constructor.
+	 *
+	 * Makes and attaches methods to buttons, and starts a listener thread.
+	 */
+	public Gooey() {
+		super("Noble Driver Station");
+		setSize(300, 200);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLayout(new FlowLayout());
 
-        stopButton.addActionListener(new ActionListener() { 
-            public void actionPerformed(ActionEvent e) { 
-                stop();
-            } 
-        });
+		startButton = new JButton("START");
+		stopButton = new JButton("STOP");
 
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                stop();
-            }
-        });
+		startButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("action");
+				start();
+			}
+		});
 
-        add(startButton);
-        add(stopButton);
-        setVisible(true);
-    }
+		stopButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				stop();
+			}
+		});
 
-    /* Listener thread soft-start function.
-     *
-     * Sets motors values away from zero (undoes
-     * the stop() function).
-     */
-    public void start() {
-        listenerThread = new ListenerThread();
-        listenerThreadShell = new Thread(listenerThread);
-        listenerThreadShell.start();
-    }
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				stop();
+			}
+		});
 
-    /*  Listener thread soft-stop function.
-     *
-     *  Sets sent motor values to zero.
-     */
-    public void stop() {
-        listenerThread.close();
-        listenerThreadShell.interrupt();
-    }
+		add(startButton);
+		add(stopButton);
+		setVisible(true);
+	}
 
-    public static void main(String[] args){
-        System.out.println("\u000c");
-        Gooey mainWindow = new Gooey();
-    }
+	/*
+	 * Listener thread soft-start function.
+	 *
+	 * Sets motors values away from zero (undoes the stop() function).
+	 */
+	public void start() {
+		listenerThread = new ListenerThread();
+		listenerThreadShell = new Thread(listenerThread);
+		listenerThreadShell.start();
+	}
+
+	/*
+	 * Listener thread soft-stop function.
+	 *
+	 * Sets sent motor values to zero.
+	 */
+	public void stop() {
+		listenerThread.close();
+		listenerThreadShell.interrupt();
+	}
+
+	public static void main(String[] args) {
+		System.out.println("\u000c");
+		Gooey mainWindow = new Gooey();
+	}
 }
