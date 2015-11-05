@@ -19,7 +19,7 @@ void setup() {
 		Serial.println("We're not");
 	}
 	
-	int retVal = esp8266.connect("academic","");
+	int retVal = esp8266.connect("academic");
 	if (retVal < 0) {
 		Serial.print(F("Error connecting: "));
 		Serial.println(retVal);
