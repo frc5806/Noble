@@ -2,8 +2,11 @@ import java.net.*;
 import java.util.*;
 import java.util.function.*;
 
+import net.java.games.input.Controller;
+import net.java.games.input.ControllerEnvironment;
+
 public class ListenerThread implements Runnable {
-    public static final int PORT = 2000;
+    public static final int PORT = 3000;
 
     ServerSocket listeningSocket = null;
     ArrayList<Thread> robotThreads;
@@ -19,8 +22,9 @@ public class ListenerThread implements Runnable {
         robotThreads = new ArrayList<Thread>();
 
         jHandler = new JoystickHandler();
+        jHandler.start();
         
-        //test();
+        test();
 
         try {
             listeningSocket = new ServerSocket(PORT);
@@ -40,6 +44,13 @@ public class ListenerThread implements Runnable {
                 System.out.println("Error accepting connection");
                 continue;
             }
+            
+            try {
+            	newConnection.setSoTimeout(3000);
+            } catch(Exception e) {
+            	e.printStackTrace();
+            	continue;
+            }
 
             Joystick j = jHandler.getOpenJoystick();
             if (j != null) {
@@ -48,9 +59,11 @@ public class ListenerThread implements Runnable {
                 robotThreads.add(new Thread(new RobotThread(newConnection, j, callback)));
                 robotThreads.get(robotThreads.size() - 1).start();
             } else {
+            	System.out.print("\n\n\nNO JOYSTICK AVAILABLE\n\n\n");
                 try {
                     newConnection.close();
                 } catch (Exception e) {
+                	e.printStackTrace();
                 }
             }
         }
@@ -74,24 +87,12 @@ public class ListenerThread implements Runnable {
     }
     
     public void test() {
-        Joystick joystick = null;
-        while(joystick == null) {
-            System.out.println("cannot get it");
-            joystick = jHandler.getOpenJoystick();
-            try {
-                Thread.sleep(3000);
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("Got it");
-        while(true) {
-            int motor = joystick.getMotor();
-            System.out.println("Motor: " + motor);
-            try {
-                Thread.sleep(500);
-            } catch(Exception e) {
-                e.printStackTrace();
+    	Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
+
+        for (Controller controller : controllers) {
+            
+            if(controller.getType() == Controller.Type.STICK) {
+            	System.out.println("c: " + controller.getName() + "; " + controller.getPortNumber());
             }
         }
     }

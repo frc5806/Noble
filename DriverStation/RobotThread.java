@@ -1,4 +1,6 @@
 import java.net.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.io.*;
 import java.util.function.*;
 
@@ -30,11 +32,19 @@ public class RobotThread implements Runnable {
 
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                out.writeInt(joystick.getMotor());
+            	int[] motorVals = joystick.getMotor();
+            	byte[] bytes = new String("("+motorVals[0]+";"+motorVals[1]+")").getBytes();
+            	out.write(bytes, 0, bytes.length);
+            	System.out.println("Sent something");
+            	
+            	
+                in.readChar();
+                
+                
                 System.out.println("Got something");
-                in.readInt();
             } catch (Exception e) {
-                break;
+                e.printStackTrace();
+            	break;
             }
         }
 
