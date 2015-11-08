@@ -10,16 +10,12 @@ The driver station should be able to take in take in multiple Logitech F310 game
 
 An additional safety function could be consistently sending motor values with an additional "key value" computed from the current timestamp.  If no new commands are detected robot-side for a period of time or key values are found to be invalid, robots should emergency stop.
 
+## Current Functionality
+
+Currently the system can functionally control any number of robots using arcade drive, however reliability is iffy among other issues.  The system was tested semi-successfully at the Bay Plaza B&N mini-makerfaire.
+
 ## To-do
-- ~~Get joystick input~~
-- ~~Allow robots to connect to drive station~~
-  - ~~Robot connects to set port number~~
-  - ~~Robot is turned away if there are not enough joysticks to handle the robot~~
-  - ~~If there are enough joysticks, robot is given port number of socket~~
-- ~~Continuously send motor values to robots~~
-- Distinguish between right and left joysticks and send two different values
-  - May require testing with actual joystick
-- ~~Build java GUI with "Stop" and "Start" Button~~
-	- Make "Stop" button set all motor values to zero, make "Start button resume normal operation"
-- Add visualization of joysticks to GUI (optional but nice)
-- Write arduino side
+- Code cleanup and style guide compliance
+- Reliability upgrades
+- GUI enhancements (see number of robots connected, connection status, names, etc)
+- Tank drive
